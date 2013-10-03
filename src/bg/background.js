@@ -14,11 +14,22 @@
  
 var internetWasOff = 0;
 var threshold = 1;
-var adressToTest = "www.google.com";
+var currentSiteIndex = 0;
+var adressesToTest = [
+	"google.com",
+	"microsoft.com",
+	"yahoo.com",
+	"hooooooooo.com",
+	"heeeeeeeey.com"
+]
 var interval = 10;
 
 setInterval(function (){
-	ping(adressToTest, 5000, response);
+	
+	ping(adressesToTest[currentSiteIndex], 5000, response);
+	currentSiteIndex ++;
+	currentSiteIndex %= adressesToTest.length;
+	
 }, interval * 1000);
 
 function response(result){
@@ -56,7 +67,7 @@ function response(result){
 }
 
 function ping(ip, timeout, callback) {
-	console.log("Pinging...");
+	console.log("Pinging " + ip + "...");
 
     if (!this.inUse) {
         this.status = 'unchecked';
