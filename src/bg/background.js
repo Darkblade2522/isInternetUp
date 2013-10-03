@@ -24,7 +24,7 @@ setInterval(function (){
 function response(result){
 	var options = {
 		type: "basic"
-	}
+	};
 	
 	switch(result)
 	{
@@ -34,21 +34,23 @@ function response(result){
 				console.log("Internet Back!");
 				options.title 	= "Internet Back!";
 				options.message = "It's safe again! Have a kitten";
-				options.iconUrl = "http://placekitten.com/50/50";
-				chrome.notifications.create(1, options, null);
+				options.iconUrl = "images/85.jpeg";
+				chrome.notifications.create("1", options, function(){});
 			}
 			internetWasOff = 0;
 			break;
+		
 		case "timeout":
+		default:
 			console.log("Acht, nein!");
 			internetWasOff++;
-			if (internetWasOff >= threshold){
+			if (internetWasOff == threshold){
 				console.log("Internet Down!");
 				options.title 	= "Internet Down!";
 				options.message = "I need a medic!";
-				options.iconUrl = "http://www.veryicon.com/icon/png/Application/Toolbar%20Icons%202/Disconnect.png";
+				options.iconUrl = "images/75.jpeg";
+				chrome.notifications.create("1", options, function(){});
 			}
-			chrome.notifications.create(1, options, null);
 			break;
 	}
 }
