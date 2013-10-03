@@ -12,8 +12,9 @@
     sendResponse();
   });*/
  
+var interval = 15;
 var internetWasOff = 0;
-var threshold = 1;
+var threshold = 2;
 var currentSiteIndex = 0;
 var adressesToTest = [
 	"google.com",
@@ -22,7 +23,6 @@ var adressesToTest = [
 	"hooooooooo.com",
 	"heeeeeeeey.com"
 ]
-var interval = 10;
 
 setInterval(function (){
 	
