@@ -12,89 +12,26 @@
     sendResponse();
   });*/
  
-var interval = 15;
 var internetWasOff = 0;
-var threshold = 2;
-var currentSiteIndex = 0;
-var adressesToTest = [
-	"google.com",
-	"microsoft.com",
-	"yahoo.com",
-	"hooooooooo.com",
-	"heeeeeeeey.com"
-]
 
-setInterval(function (){
-	
-	ping(adressesToTest[currentSiteIndex], 5000, response);
-	currentSiteIndex ++;
-	currentSiteIndex %= adressesToTest.length;
-	
-}, interval * 1000);
-
-function response(result){
-	var options = {
-		type: "basic"
-	};
-	
-	switch(result)
-	{
-		case "responded":
-			console.log("Ok!");
-			if (internetWasOff >= threshold){
-				console.log("Internet Back!");
-				options.title 	= "Internet Back!";
-				options.message = "It's safe again! Have a kitten";
-				options.iconUrl = "images/85.jpeg";
-				chrome.notifications.create("1", options, function(){});
-			}
-			internetWasOff = 0;
-			break;
-		
-		case "timeout":
-		default:
-			console.log("Acht, nein!");
-			internetWasOff++;
-			if (internetWasOff == threshold){
-				console.log("Internet Down!");
-				options.title 	= "Internet Down!";
-				options.message = "I need a medic!";
-				options.iconUrl = "images/75.jpeg";
-				chrome.notifications.create("1", options, function(){});
-			}
-			break;
+function online(event) {
+	if (navigator.onLine && internetWasOff == 1){
+		internetWasOff = 0
+		console.log("Internet Back!");
+		options.title 	= "Internet Back!";
+		options.message = "It's safe again! Have a kitten";
+		options.iconUrl = "images/85.jpeg";
+		chrome.notifications.create("1", options, function(){});
+	}
+	else{
+		internetWasOff = 1;
+		console.log("Internet Down!");
+		options.title 	= "Internet Down!";
+		options.message = "I need a medic!";
+		options.iconUrl = "images/75.jpeg";
+		chrome.notifications.create("1", options, function(){});
 	}
 }
 
-function ping(ip, timeout, callback) {
-	console.log("Pinging " + ip + "...");
-
-    if (!this.inUse) {
-        this.status = 'unchecked';
-        this.inUse = true;
-        this.callback = callback;
-        this.ip = ip;
-        var _that = this;
-        this.img = new Image();
-        this.img.onload = function () {
-            _that.inUse = false;
-            _that.callback('responded');
-
-        };
-        this.img.onerror = function (e) {
-            if (_that.inUse) {
-                _that.inUse = false;
-                _that.callback('responded', e);
-            }
-
-        };
-        this.start = new Date().getTime();
-        this.img.src = "http://" + ip;
-        this.timer = setTimeout(function () {
-            if (_that.inUse) {
-                _that.inUse = false;
-                _that.callback('timeout');
-            }
-        }, timeout);
-    }
-}
+window.addEventListener('online', online, false);
+window.addEventListener('offline', online, false);
