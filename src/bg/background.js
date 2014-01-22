@@ -15,6 +15,10 @@
 var internetWasOff = 0;
 
 function online(event) {
+	var options = {
+		type: "basic"
+	};
+
 	if (navigator.onLine && internetWasOff == 1){
 		internetWasOff = 0
 		console.log("Internet Back!");
